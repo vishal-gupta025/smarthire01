@@ -8,6 +8,8 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.parsers import MultiPartParser, FormParser
+from apps.accounts.permissions import IsCandidate, IsRecruiter
 
 class RegisterView(APIView):   
     permission_classes = []
@@ -49,7 +51,7 @@ class RegisterView(APIView):
 
 class LoginView(TokenObtainPairView):
     serializer_class = LoginTokenSerializer
-    
+
 
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
@@ -78,7 +80,8 @@ class LogoutView(APIView):
 
 
 class CandidateProfileView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsCandidate]
+    parser_classes = [MultiPartParser, FormParser]
 
     def get(self, request):
         try:
@@ -96,7 +99,7 @@ class CandidateProfileView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
         
-    def post(self, request):
+    def patch(self, request):
         try:
             profile = request.user.candidate_profile
             serializer = CandidateProfileSerializer(profile, data=request.data, partial=True)
@@ -116,7 +119,7 @@ class CandidateProfileView(APIView):
             )    
         
 class RecruiterProfileView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsRecruiter]
 
     def get(self, request):
         try:

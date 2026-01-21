@@ -21,18 +21,14 @@ class UserSerializer(serializers.ModelSerializer):
 
 class CandidateProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
-    resume = serializers.FileField(required=False)
+    skills = serializers.CharField(required=False, allow_blank=True)
+    experience = serializers.CharField(required=False, allow_blank=True)
+    education = serializers.CharField(required=False, allow_blank=True)
 
     class Meta:
         model = candidateProfile
-        fields = ['id', 'user', 'full_name', 'skills', 'experience', 'education', 'resume', 'uploaded_at', 'updated_at']
-
-    def validate_skills(self, value):
-        if value in (None, '', []):
-            return []
-        if isinstance(value, str):
-            return [item.strip() for item in value.split(',') if item.strip()]
-        return value
+        fields = ['id', 'user', 'full_name', 'skills', 'experience', 'education', 'uploaded_at', 'updated_at']
+        read_only_fields = ['uploaded_at', 'updated_at']
         
 
 class RecruiterProfileSerializer(serializers.ModelSerializer):

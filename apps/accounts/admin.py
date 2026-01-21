@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import User, candidateProfile, recruiterProfile
+from apps.resumes.admin import ResumeInline
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -9,9 +10,10 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(candidateProfile)
 class CandidateProfileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'full_name', 'skills', 'experience', 'education', 'resume')
+    list_display = ('id', 'user', 'full_name', 'skills', 'experience', 'education')
     search_fields = ('user__email', 'full_name', 'skills')
     list_filter = ('experience', 'education')
+    inlines = [ResumeInline]
 
 @admin.register(recruiterProfile)
 class RecruiterProfileAdmin(admin.ModelAdmin):
