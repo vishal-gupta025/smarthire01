@@ -25,10 +25,7 @@ INSTALLED_APPS += [
     "apps.accounts",
     "apps.jobs",
     "apps.resumes",
-    "apps.ai",
-    "apps.recommendations",
-    "apps.matching",
-    "apps.analytics",
+    
 ]
 
 MIDDLEWARE = [
