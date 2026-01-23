@@ -25,7 +25,7 @@ INSTALLED_APPS += [
     "apps.accounts",
     "apps.jobs",
     "apps.resumes",
-    
+    "apps.home",    
 ]
 
 MIDDLEWARE = [
