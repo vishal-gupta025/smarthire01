@@ -10,13 +10,13 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(candidateProfile)
 class CandidateProfileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'full_name', 'skills', 'experience', 'education')
+    list_display = ('id', 'user', 'full_name', 'skills', 'experience', 'education', 'uploaded_at', 'updated_at')
     search_fields = ('user__email', 'full_name', 'skills')
     list_filter = ('experience', 'education')
     inlines = [ResumeInline]
 
 @admin.register(recruiterProfile)
 class RecruiterProfileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'company_name', 'location', 'company_description', 'job_descriptions')
+    list_display = ('id', 'user', 'company_name', 'location', 'company_description')
     search_fields = ('user__email', 'company_name',)
     list_filter = ('location',)

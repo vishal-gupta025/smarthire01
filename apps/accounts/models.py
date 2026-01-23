@@ -34,13 +34,12 @@ class User(AbstractUser):
         return self.email
 
 
-
 class candidateProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='candidate_profile')
-    full_name = models.CharField(max_length=255, blank=True)
-    skills = models.TextField(blank=True, help_text="Comma-separated skills")
-    experience = models.TextField(blank=True)
-    education = models.TextField(blank=True)
+    full_name = models.CharField(max_length=255, blank=True, help_text="Full name of the candidate")
+    skills = models.TextField(blank=True, null=True, help_text="Comma-separated skills")
+    experience = models.TextField(blank=True, null=True, help_text="Experience details")
+    education = models.TextField(blank=True, null=True, help_text="Educational qualifications")
     uploaded_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -49,10 +48,9 @@ class candidateProfile(models.Model):
     
 class recruiterProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='recruiter_profile')
-    company_name = models.CharField(max_length=255, blank=True)
-    location = models.CharField(max_length=255, blank=True)
-    company_description = models.TextField(blank=True)
-    job_descriptions = models.FileField(upload_to='job_descriptions/', blank=True, null=True, help_text="job Descriptiona must include job title, responsibilities, qualifications, benefits, locations etc.")
+    company_name = models.CharField(max_length=255, blank=True, help_text="Name of the recruiter's company")
+    location = models.CharField(max_length=255, blank=True, help_text="Location of the company")
+    company_description = models.TextField(blank=True, help_text="Description of the company")
     uploaded_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

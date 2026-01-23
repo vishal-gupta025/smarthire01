@@ -13,6 +13,7 @@ urlpatterns = [
     path('api/accounts/', include('apps.accounts.urls')),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/resumes/', include('apps.resumes.urls')),
+    path('api/jobs/', include('apps.jobs.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
