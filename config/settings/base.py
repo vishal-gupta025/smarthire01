@@ -19,6 +19,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
+    "django_filters",
+    "axes",
 ]
 
 INSTALLED_APPS += [
@@ -29,6 +31,7 @@ INSTALLED_APPS += [
 ]
 
 MIDDLEWARE = [
+    "axes.middleware.AxesMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -77,6 +80,21 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
+    "DEFAULT_PAGINATION_CLASS": "apps.accounts.pagination.StandardResultsPagination",
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.SearchFilter",
+        "rest_framework.filters.OrderingFilter",
+    ],
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.UserRateThrottle",
+        "rest_framework.throttling.AnonRateThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": "50/min",
+        "user": "500/min",
+        "upload_resume": "5/hour"
+    },
 
 }
 
@@ -96,3 +114,13 @@ ASGI_APPLICATION = "config.asgi.application"
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+AUTHENTICATION_BACKENDS = [
+    'axes.backends.AxesBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+AXES_FAILURE_LIMIT = 5          
+AXES_COOLOFF_TIME = 1           
+AXES_LOCKOUT_CALLABLE = None
+AXES_RESET_ON_SUCCESS = True
+

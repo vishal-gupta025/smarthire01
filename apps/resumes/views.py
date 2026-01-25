@@ -10,11 +10,13 @@ from apps.accounts.serializers import CandidateProfileSerializer
 from .models import Resume, ResumeAnalysis
 from apps.accounts.permissions import IsCandidate
 from apps.resumes.services.resume_parser import parse_resume_with_llm
+from .throttles import ResumeUploadThrottle
 
 
 class ResumeUploadView(APIView):
     permission_classes = [IsAuthenticated, IsCandidate]
     parser_classes = [MultiPartParser, FormParser]
+    throttle_classes = [ResumeUploadThrottle]
 
     def post(self, request):
         try:
@@ -25,6 +27,12 @@ class ResumeUploadView(APIView):
         resume_file = request.FILES.get("resume")
         if not resume_file:
             return Response({"error": "Resume file required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        old_resumes = profile.resumes.all()
+        for old_resume in old_resumes:
+            if old_resume.file:
+                old_resume.file.delete(save=False)  
+            old_resume.delete() 
 
         resume = Resume.objects.create(candidate=profile, file=resume_file)
 

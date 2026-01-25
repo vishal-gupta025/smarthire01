@@ -1,31 +1,30 @@
-from django.shortcuts import render
+from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
 from apps.accounts.permissions import IsCandidate
 from apps.jobs.models import Job
+from apps.jobs.serializers import JobSerializer
+from apps.jobs.filters import JobFilter
 
-class HomeView(APIView):
+class HomeView(ListAPIView):
     permission_classes = [IsAuthenticated, IsCandidate]
+    serializer_class = JobSerializer
+    filterset_class = JobFilter
 
-    def get(self, request):
-        jobs = Job.objects.filter(job_status=True).order_by('-posted_at')
-        if not jobs.exists():
-            return Response({"message": "No active jobs available at the moment."}, status=status.HTTP_200_OK)
-        job_list = [
-            {
-                "title": job.title,
-                "job_descriptions": job.job_descriptions,
-                "skills_required": job.skills_required,
-                "experience_required": job.experience_required,
-                "location": job.location,
-                "job_status": job.job_status,
-                "number_of_openings": job.number_of_openings,
-                "salary_min": job.salary_min,
-                "salary_max": job.salary_max,
-                "posted_at": job.posted_at,
-            }
-            for job in jobs
-        ]
-        return Response(job_list, status=status.HTTP_200_OK)
+    search_fields = [
+        "title",
+        "skills_required",
+        "job_descriptions",
+        "location",
+        "job_type",
+    ]
+
+    ordering_fields = [
+        "posted_at",
+        "salary_min",
+        "salary_max",
+        "experience_required",
+    ]
+    ordering = ["-posted_at"]
+
+    def get_queryset(self):
+        return Job.objects.filter(job_status=True)

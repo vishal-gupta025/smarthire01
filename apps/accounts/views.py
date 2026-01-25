@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from apps.accounts.permissions import IsCandidate, IsRecruiter
 
 class RegisterView(APIView):   
@@ -81,7 +81,7 @@ class LogoutView(APIView):
 
 class CandidateProfileView(APIView):
     permission_classes = [IsAuthenticated, IsCandidate]
-    parser_classes = [MultiPartParser, FormParser]
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
 
     def get(self, request):
         try:
@@ -120,7 +120,10 @@ class CandidateProfileView(APIView):
         
 class RecruiterProfileView(APIView):
     permission_classes = [IsAuthenticated, IsRecruiter]
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
 
+
+    # Retrieves the authenticated recruiter's profile information
     def get(self, request):
         try:
             profile = request.user.recruiter_profile
@@ -136,7 +139,7 @@ class RecruiterProfileView(APIView):
                 {'error': str(e)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-    
+    # Updates the authenticated recruiter's profile (partial update supported)
     def post(self, request):
         try:
             profile = request.user.recruiter_profile
