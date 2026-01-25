@@ -23,7 +23,7 @@ class Job(models.Model):
         default=JobType.FULL_TIME,
     )
         
-    number_of_openings = models.IntegerField(default=1, help_text="Number of openings for the job position")
+    number_of_openings = models.IntegerField(blank=False, null=False, default=1, help_text="Number of openings for the job position")
     salary_min = models.IntegerField(default=0, null=False, blank=False, help_text="Minimum salary for the job position")
     salary_max = models.IntegerField(
         default=0,

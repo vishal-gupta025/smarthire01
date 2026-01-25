@@ -8,6 +8,4 @@ urlpatterns = [
     path('<int:job_id>/applications/', views.JobApplicationView.as_view(), name='job-applications'),
     path('recruiter/applications/<int:application_id>/status/', views.JobApplicationStatusUpdateView.as_view(), name='application-detail'),
     path('candidate/applications/', views.CandidateApplicationsView.as_view(), name='candidate-applications'),
-
-
 ]

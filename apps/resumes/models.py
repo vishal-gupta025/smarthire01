@@ -6,6 +6,16 @@ from django.core.validators import FileExtensionValidator
 class Resume(models.Model):
     candidate = models.ForeignKey(candidateProfile, on_delete=models.CASCADE, related_name='resumes')
     file = models.FileField(upload_to='resumes/', validators=[FileExtensionValidator(allowed_extensions=['pdf', 'docx'])])
+    status = models.CharField(
+        max_length=20,
+        choices=[
+            ("PENDING", "Pending"),
+            ("PROCESSING", "Processing"),
+            ("COMPLETED", "Completed"),
+            ("FAILED", "Failed"),
+        ],
+        default="PENDING"
+    )
     uploaded_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

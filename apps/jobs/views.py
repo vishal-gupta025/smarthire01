@@ -11,6 +11,7 @@ from .models import Job
 from .serializers import JobSerializer
 from apps.accounts.models import candidateProfile, recruiterProfile
 from .models import JobApplication
+from .tasks import send_application_email, send_status_update_email
 
 class JobListCreateView(APIView):
     permission_classes = [IsAuthenticated, IsRecruiter]
@@ -97,6 +98,11 @@ class JobApplyView(APIView):
         if JobApplication.objects.filter(job=job, candidate=candidate).exists():
             return Response({"detail": "You have already applied for this job."}, status=status.HTTP_400_BAD_REQUEST)
         JobApplication.objects.create(job=job, candidate=candidate)
+        send_application_email.delay(
+            candidate_email=candidate.user.email,
+            job_title=job.title,
+            company_name=job.recruiter.company_name
+            )
         return Response({"detail": "Application submitted successfully."}, status=status.HTTP_201_CREATED)  
 
     
@@ -145,8 +151,17 @@ class JobApplicationStatusUpdateView(APIView):
         
         if application.job.recruiter != recruiter:
             return Response({"detail": "You do not have permission to update this application."}, status=status.HTTP_403_FORBIDDEN)
+        old_status = application.status
+        if old_status == new_status:
+            return Response({"detail": "The application already has this status."}, status=status.HTTP_400_BAD_REQUEST)
         application.status = new_status
         application.save()
+        send_status_update_email.delay(
+            candidate_email=application.candidate.user.email,
+            job_title=application.job.title,
+            company_name=application.job.recruiter.company_name,
+            new_status=new_status
+        )
         return Response({"detail": "Application status updated successfully."}, status=status.HTTP_200_OK)
     
 class CandidateApplicationsView(APIView):

@@ -8,12 +8,12 @@ class ResumeAnalysisInline(admin.StackedInline):
 class ResumeInline(admin.StackedInline):
     model = Resume
     extra = 0
-    list_display = ('uploaded_at', 'updated_at')
+    list_display = ('candidate', 'status', 'uploaded_at', 'updated_at')
     show_change_link = True
 
 @admin.register(Resume)
 class ResumeAdmin(admin.ModelAdmin):
-    list_display = ('candidate', 'uploaded_at', 'updated_at')
+    list_display = ('candidate', 'status', 'uploaded_at', 'updated_at')
     inlines = [ResumeAnalysisInline]
 
     def has_add_permission(self, request):
