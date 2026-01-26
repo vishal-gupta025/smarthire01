@@ -5,8 +5,6 @@
 [![Django](https://img.shields.io/badge/Django-5.2-darkgreen?logo=django)](https://djangoproject.com)
 [![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
-> **Author:** [Vishal Gupta](https://github.com/vishal-gupta025) 👨‍💻
-
 SmartHire is an intelligent recruitment platform that leverages AI to streamline the hiring process. It provides a robust backend API for managing job postings, candidate profiles, and automated resume parsing using LLM technology.
 
 ## 🚀 Features
