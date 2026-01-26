@@ -1,7 +1,7 @@
 venv/
 .env
 .env.*
-.env.docker
+!.env.example
 __pycache__/
 *.pyc
 db.sqlite3
