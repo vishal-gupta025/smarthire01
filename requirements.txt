@@ -1,5 +1,10 @@
 
 gunicorn
+django-axes
+pdfplumber
+langchain
+langchain-openai
+langsmith
 
 amqp==5.3.1
 asgiref==3.11.0
@@ -21,7 +26,6 @@ djangorestframework_simplejwt==5.5.1
 kombu==5.6.2
 lxml==6.0.2
 packaging==25.0
-pdfminer.six==20260107
 prompt_toolkit==3.0.52
 psycopg2-binary==2.9.11
 pycparser==2.23
