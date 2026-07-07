@@ -1,0 +1,15 @@
+venv/
+.env
+.env.*
+# Local Docker secrets/config; keep out of git
+.env.docker
+!.env.example
+__pycache__/
+*.pyc
+db.sqlite3
+media/
+staticfiles/
+.DS_Store
+.idea/
+API_DOCUMENTATION.md
+DOCKER_README.md
